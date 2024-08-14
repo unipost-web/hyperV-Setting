@@ -1,4 +1,4 @@
-import { Separator } from '@radix-ui/react-dropdown-menu';
+import { Separator } from '@/components/ui/separator.tsx';
 import { SidebarNav } from '@/components/common/SidebarNav.tsx';
 
 const sidebarNavItems = [

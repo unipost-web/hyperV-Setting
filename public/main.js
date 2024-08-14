@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import isDev from 'electron-is-dev';
-import { app, Tray, Menu, BrowserWindow } from 'electron/main';
+import { app, Tray, Menu, BrowserWindow, ipcMain } from 'electron/main';
 import electronLocalShortcut from 'electron-localshortcut';
 
 // 현재 모듈의 디렉토리 경로를 얻습니다.
@@ -108,4 +108,9 @@ app.on('ready', () => {
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit();
+});
+
+ipcMain.on('channel', (event, data) => {
+  console.log(':: From Renderer Process ::', data);
+  event.sender.send('channel', 'From Main Process');
 });

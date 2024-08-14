@@ -1,8 +1,8 @@
-// preload.ts
-import { contextBridge } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
 
-contextBridge.exposeInMainWorld('versions', {
-  node: () => process.versions.node,
-  chrome: () => process.versions.chrome,
-  electron: () => process.versions.electron,
+const preloadInterface = 'myPreload';
+
+contextBridge.exposeInMainWorld(preloadInterface, {
+  listenChannelMessage: (callback) => ipcRenderer.on('channel', (_, data) => callback(data)),
+  sendMessage: (data) => ipcRenderer.send('channel', data),
 });

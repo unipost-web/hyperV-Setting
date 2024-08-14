@@ -1,4 +1,4 @@
-import { Separator } from '@radix-ui/react-dropdown-menu';
+import { Separator } from '@/components/ui/separator.tsx';
 
 const HeaderTitle = ({ title, description }: any) => {
   return (
