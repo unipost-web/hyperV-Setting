@@ -13,6 +13,7 @@ const browserOption = {
   width: 800,
   height: 960,
   webPreferences: {
+    contextIsolation: false,
     nodeIntegration: true,
     enableRemoteModule: true,
     devTools: isDev,

@@ -3,24 +3,24 @@ import { SidebarNav } from '@/components/common/SidebarNav.tsx';
 
 const sidebarNavItems = [
   {
-    title: 'Profile',
-    href: '/examples/forms',
+    title: 'Main',
+    href: '/',
   },
   {
-    title: 'Account',
-    href: '/examples/forms/account',
+    title: 'HostName',
+    href: '/hostName',
   },
   {
-    title: 'Appearance',
-    href: '/examples/forms/appearance',
+    title: 'NetWork',
+    href: '/netWork',
   },
   {
-    title: 'Notifications',
-    href: '/examples/forms/notifications',
+    title: 'PortProxy',
+    href: '/portProxy',
   },
   {
-    title: 'Display',
-    href: '/examples/forms/display',
+    title: 'Util',
+    href: '/util',
   },
 ];
 
@@ -32,8 +32,10 @@ const MainLayout = ({ children }: SettingsLayoutProps) => {
   return (
     <div className="hidden space-y-6 p-10 pb-16 md:block">
       <div className="space-y-0.5">
-        <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
-        <p className="text-muted-foreground">Manage your account settings and set e-mail preferences.</p>
+        <h2 className="text-2xl font-bold tracking-tight">HyperV-Settings</h2>
+        <p className="text-muted-foreground">
+          Easily manage and configure your virtual environment's essential settings.
+        </p>
       </div>
       <Separator className="my-6" />
       <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
