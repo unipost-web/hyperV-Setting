@@ -1,43 +1,57 @@
-import HeaderTitle from '@/components/common/HeaderTitle.tsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.tsx';
+import { Label } from '@/components/ui/label.tsx';
+import { Input } from '@/components/ui/input.tsx';
+import { Button } from '@/components/ui/button.tsx';
+import { useAlertStore } from '@/store/alertStore.ts';
 
 export default function HostNamePage() {
-  const [hostname, setHostname] = useState('');
-  const [message, setMessage] = useState('');
-  const { ipcRenderer } = window.require('electron');
-  const handleHostnameChange = () => {
-    ipcRenderer.send('change-hostname', hostname);
+  const [hostname, setHostname] = useState('local-');
+  const { setAlert } = useAlertStore();
+
+  const handleChange = (e: any) => {
+    setHostname(e.target.value);
   };
 
-  useEffect(() => {
-    // IPC 이벤트 리스너 등록
-    ipcRenderer.on('channel', (event: any, data: string) => {
-      setMessage(data);
-    });
-  }, [ipcRenderer]);
-
-  const handleClick = () => {
-    ipcRenderer.send('channel', 'aaa');
+  const handleChangeHostName = () => {
+    const regex = /^[a-zA-Z0-9-]*$/;
+    if (!regex.test(hostname)) {
+      const description = `호스트네임은 영문, 숫자, "-" 를 추천 드립니다.\n그래도 변경하시겠습니까??`;
+      setAlert('HostName Change', description);
+    }
   };
 
   return (
     <>
-      <HeaderTitle title={'HostName'} description={'PC 의 호스트네임을 변경하는 페이지.'} />
-      <div className="container">
-        <h1>Recive: {message}</h1>
-        <button onClick={handleClick}>Click me</button>
-        <h2 className="text-2xl font-bold tracking-tight">HyperV-Settings</h2>
-        <p className="text-muted-foreground">{`Configure your virtual machines' hostname, network, and more.`}</p>
-        <input
-          type="text"
-          value={hostname}
-          onChange={(e) => setHostname(e.target.value)}
-          placeholder="Enter new hostname"
-          className="input-field"
-        />
-        <button onClick={handleHostnameChange} className="btn-primary">
-          Change Hostname
-        </button>
+      <div className="grid gap-4">
+        <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
+          <Card x-chunk="dashboard-07-chunk-0">
+            <CardHeader>
+              <CardTitle>HostName Change</CardTitle>
+              <CardDescription>호스트 네임 변경 시 재부팅을 해야 적용이 됩니다.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-6">
+                <div className="grid gap-3">
+                  <Label htmlFor="hostName">HostName</Label>
+                  <Input
+                    id="hostName"
+                    type="text"
+                    className="w-72"
+                    value={hostname}
+                    onChange={handleChange}
+                    maxLength={25}
+                  />
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter className="justify-center">
+              <Button variant="outline" onClick={handleChangeHostName}>
+                HostName Change
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
       </div>
     </>
   );
