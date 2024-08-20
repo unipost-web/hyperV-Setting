@@ -40,7 +40,6 @@ const createWindow = async () => {
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
-  mainWindow.webContents.openDevTools({ mode: 'detach' });
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
     electronLocalShortcut.register(mainWindow, 'F5', () => {
@@ -55,10 +54,6 @@ const createWindow = async () => {
 const createTray = () => {
   tray = new Tray(iconPath);
   const contextMenu = Menu.buildFromTemplate([
-    {
-      label: '도움말',
-      click: async () => {},
-    },
     {
       label: '재시작',
       click: () => {
@@ -75,7 +70,7 @@ const createTray = () => {
     },
   ]);
 
-  tray.setToolTip('Mark-Light');
+  tray.setToolTip('HyperV-Setting');
   tray.setContextMenu(contextMenu);
 
   tray.on('click', () => {

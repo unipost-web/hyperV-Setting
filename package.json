@@ -1,7 +1,7 @@
 {
   "name": "hyperv-setting",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "main": "electron/main.js",
   "homepage": ".",
@@ -68,13 +68,16 @@
     ],
     "asar": false,
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "./electron/256_favicon.ico",
+      "requestedExecutionLevel" : "requireAdministrator"
     },
     "nsis": {
       "oneClick": true,
-      "shortcutName": "Mark-Light",
-      "artifactName": "Mark-Light ${version}.${ext}",
-      "uninstallDisplayName": "Mark-Light"
+      "createDesktopShortcut": true,
+      "shortcutName": "HyperV-Setting",
+      "artifactName": "HyperV-Setting ${version}.${ext}",
+      "uninstallDisplayName": "HyperV-Setting"
     }
   }
 }

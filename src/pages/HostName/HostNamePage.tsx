@@ -32,7 +32,11 @@ export default function HostNamePage() {
     if (!response.success) {
       toast({ variant: 'destructive', title: response.message });
     } else {
-      setAlert({ title: response.message, description: '컴퓨터를 지금 다시 시작 하시겠습니까??' });
+      setAlert({
+        title: response.message,
+        description: '컴퓨터를 지금 다시 시작 하시겠습니까??',
+        handleProceed: await window.electron.reboot,
+      });
     }
   };
 

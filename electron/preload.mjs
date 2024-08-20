@@ -7,4 +7,7 @@ contextBridge.exposeInMainWorld('electron', {
   getConfig: async () => {
     return await ipcRenderer.invoke('getConfig');
   },
+  reboot: async () => {
+    return await ipcRenderer.invoke('reboot');
+  },
 });

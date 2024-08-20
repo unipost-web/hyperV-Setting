@@ -7,6 +7,7 @@ interface Response {
 interface Electron {
   changeHostName: (param: object) => Promise<Response>;
   getConfig: () => Promise<Response>;
+  reboot: () => Promise<Reponse>;
 }
 
 interface Window {
