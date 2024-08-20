@@ -1,4 +1,5 @@
 import { app, BrowserWindow, Tray, Menu } from 'electron';
+import isDev from 'electron-is-dev';
 import electronLocalShortcut from 'electron-localshortcut';
 import { paths } from './common.js';
 import setupIpcHandlers from './ipcMainService.js';
@@ -40,7 +41,8 @@ const createWindow = async () => {
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
-  mainWindow.webContents.openDevTools({ mode: 'detach' });
+
+  if (isDev) mainWindow.webContents.openDevTools({ mode: 'detach' });
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
     electronLocalShortcut.register(mainWindow, 'F5', () => {
