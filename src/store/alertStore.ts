@@ -4,8 +4,8 @@ interface AlertState {
   open: boolean;
   title: string;
   description?: string;
-  handleProceed?: () => void;
-  setAlert: (params: { title: string; description?: string; handleProceed?: () => void }) => void;
+  closeCallBack?: () => void;
+  setAlert: (params: { title: string; description?: string; closeCallBack?: () => void }) => void;
   closeAlert: () => void;
 }
 
@@ -13,7 +13,7 @@ export const useAlertStore = create<AlertState>((set) => ({
   open: false,
   title: '',
   description: '',
-  handleProceed: () => {},
-  setAlert: ({ title, description, handleProceed }) => set({ open: true, title, description, handleProceed }),
+  closeCallBack: () => {},
+  setAlert: ({ title, description, closeCallBack }) => set({ open: true, title, description, closeCallBack }),
   closeAlert: () => set({ open: false }),
 }));

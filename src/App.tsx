@@ -6,12 +6,13 @@ import HostNamePage from '@/pages/HostName/HostNamePage.tsx';
 import NetWorkPage from '@/pages/Network/NetWorkPage.tsx';
 import PortProxyPage from '@/pages/PortProxy/PortProxyPage.tsx';
 import UtilPage from '@/pages/Util/UtilPage.tsx';
-import UniAlertConfirm from '@/components/common/UniAlertConfirm.tsx';
+import UniConfirm from '@/components/common/UniConfirm.tsx';
 
 import { ThemeProvider } from '@/components/theme-provider.tsx';
 import { Toaster } from '@/components/ui/toaster.tsx';
 import { useConfigStore } from '@/store/configStore.ts';
 import { useEffect, useState } from 'react';
+import UniAlert from '@/components/common/UniAlert.tsx';
 
 function App() {
   const { setConfigData } = useConfigStore();
@@ -42,7 +43,8 @@ function App() {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <RootLayout>
         <Toaster />
-        <UniAlertConfirm />
+        <UniConfirm />
+        <UniAlert />
         <Routes>
           <Route path={'/'} element={<MainPage />}></Route>
           <Route path={'/hostName'} element={<HostNamePage />}></Route>

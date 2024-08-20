@@ -1,6 +1,7 @@
 import isDev from 'electron-is-dev';
 import path from 'node:path';
 import { exec } from 'child_process';
+import iconv from 'iconv-lite';
 const __dirname = path.resolve();
 
 // Define base paths
@@ -22,11 +23,11 @@ export const paths = {
 
 export const execPromise = (command) => {
   return new Promise((resolve, reject) => {
-    exec(command, (err, stdout, stderr) => {
+    exec(command, { encoding: 'buffer' }, (err, stdout, stderr) => {
       if (err) {
         reject({ error: err, stderr });
       } else {
-        resolve(stdout);
+        resolve(iconv.decode(stdout, 'cp949'));
       }
     });
   });

@@ -3,13 +3,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from '@/components/ui/label.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Button } from '@/components/ui/button.tsx';
-import { useAlertStore } from '@/store/alertStore.ts';
 import { toast } from '@/components/ui/use-toast.ts';
+import { useConfirmStore } from '@/store/confirmStore.ts';
 import { useConfigStore } from '@/store/configStore.ts';
 
 export default function HostNamePage() {
   const { configData } = useConfigStore();
-  const { setAlert } = useAlertStore();
+  const { setConfirm } = useConfirmStore();
   const [changeHostName, setChangeHostname] = useState('local-');
   const currentHostName = configData.data?.currentHostName || '로딩 중...';
 
@@ -32,7 +32,7 @@ export default function HostNamePage() {
     if (!response.success) {
       toast({ variant: 'destructive', title: response.message });
     } else {
-      setAlert({
+      setConfirm({
         title: response.message,
         description: '컴퓨터를 지금 다시 시작 하시겠습니까??',
         handleProceed: await window.electron.reboot,
@@ -56,7 +56,7 @@ export default function HostNamePage() {
                   <Input
                     id="hostName"
                     type="text"
-                    className="w-72"
+                    className="w-full"
                     value={changeHostName}
                     onChange={handleChange}
                     maxLength={20}
@@ -64,10 +64,8 @@ export default function HostNamePage() {
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="justify-center">
-              <Button variant="outline" onClick={handleChangeHostName}>
-                HostName 변경
-              </Button>
+            <CardFooter className={'flex justify-end'}>
+              <Button onClick={handleChangeHostName}>HostName 변경</Button>
             </CardFooter>
           </Card>
         </div>

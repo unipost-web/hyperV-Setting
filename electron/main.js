@@ -40,6 +40,7 @@ const createWindow = async () => {
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
+  mainWindow.webContents.openDevTools({ mode: 'detach' });
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
     electronLocalShortcut.register(mainWindow, 'F5', () => {

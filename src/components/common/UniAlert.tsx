@@ -1,17 +1,15 @@
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog.tsx';
-import { useAlertStore } from '@/store/alertStore';
+import { useAlertStore } from '@/store/alertStore.ts';
 
-export default function UniAlertConfirm() {
-  const { open, title, description, closeAlert, handleProceed } = useAlertStore();
+export default function UniAlert() {
+  const { open, title, description, closeAlert, closeCallBack = () => {} } = useAlertStore();
 
   return (
     <AlertDialog open={open} onOpenChange={closeAlert}>
@@ -19,11 +17,8 @@ export default function UniAlertConfirm() {
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
+          <AlertDialogAction onClick={closeCallBack}>확인</AlertDialogAction>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel onClick={closeAlert}>취소</AlertDialogCancel>
-          <AlertDialogAction onClick={handleProceed}>진행</AlertDialogAction>
-        </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );
