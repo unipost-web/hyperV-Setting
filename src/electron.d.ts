@@ -1,7 +1,14 @@
+interface Response {
+  success: boolean;
+  message: string;
+  data: object;
+}
+
 interface Electron {
-    changeHostName: (templateData: TemplateData[]) => Promise<string>;
+  changeHostName: (param: object) => Promise<Response>;
+  getConfig: () => Promise<Response>;
 }
 
 interface Window {
-    electron: Electron;
+  electron: Electron;
 }

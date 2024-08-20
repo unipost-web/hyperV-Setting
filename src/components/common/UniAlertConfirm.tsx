@@ -10,8 +10,8 @@ import {
 } from '@/components/ui/alert-dialog.tsx';
 import { useAlertStore } from '@/store/alertStore';
 
-export default function Alert() {
-  const { open, title, description, closeAlert } = useAlertStore();
+export default function UniAlertConfirm() {
+  const { open, title, description, closeAlert, handleProceed } = useAlertStore();
 
   return (
     <AlertDialog open={open} onOpenChange={closeAlert}>
@@ -21,8 +21,8 @@ export default function Alert() {
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={closeAlert}>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogCancel onClick={closeAlert}>취소</AlertDialogCancel>
+          <AlertDialogAction onClick={handleProceed}>진행</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

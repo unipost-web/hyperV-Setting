@@ -4,20 +4,35 @@ import { Label } from '@/components/ui/label.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { useAlertStore } from '@/store/alertStore.ts';
+import { toast } from '@/components/ui/use-toast.ts';
+import { useConfigStore } from '@/store/configStore.ts';
 
 export default function HostNamePage() {
-  const [hostname, setHostname] = useState('local-');
+  const { configData } = useConfigStore();
   const { setAlert } = useAlertStore();
+  const [changeHostName, setChangeHostname] = useState('local-');
+  const currentHostName = configData.data?.currentHostName || '로딩 중...';
 
   const handleChange = (e: any) => {
-    setHostname(e.target.value);
+    setChangeHostname(e.target.value);
   };
 
-  const handleChangeHostName = () => {
+  const handleChangeHostName = async () => {
     const regex = /^[a-zA-Z0-9-]*$/;
-    if (!regex.test(hostname)) {
-      const description = `호스트네임은 영문, 숫자, "-" 를 추천 드립니다.\n그래도 변경하시겠습니까??`;
-      setAlert('HostName Change', description);
+    if (!regex.test(changeHostName)) {
+      toast({
+        variant: 'destructive',
+        title: '호스트 네임을 정상적으로 입력해주세요.',
+        description: '호스트네임은 영문, 숫자, "-" 만 가능합니다.',
+      });
+      return;
+    }
+
+    const response = await window.electron.changeHostName({ currentHostName, changeHostName });
+    if (!response.success) {
+      toast({ variant: 'destructive', title: response.message });
+    } else {
+      setAlert({ title: response.message, description: '컴퓨터를 지금 다시 시작 하시겠습니까??' });
     }
   };
 
@@ -27,27 +42,27 @@ export default function HostNamePage() {
         <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
           <Card x-chunk="dashboard-07-chunk-0">
             <CardHeader>
-              <CardTitle>HostName Change</CardTitle>
-              <CardDescription>호스트 네임 변경 시 재부팅을 해야 적용이 됩니다.</CardDescription>
+              <CardTitle>PC 이름 바꾸기</CardTitle>
+              <CardDescription>문자, 하이픈 및 숫자를 조합해서 사용할 수 있습니다.</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-6">
                 <div className="grid gap-3">
-                  <Label htmlFor="hostName">HostName</Label>
+                  <Label htmlFor="hostName">현재 PC 이름 : {currentHostName}</Label>
                   <Input
                     id="hostName"
                     type="text"
                     className="w-72"
-                    value={hostname}
+                    value={changeHostName}
                     onChange={handleChange}
-                    maxLength={25}
+                    maxLength={20}
                   />
                 </div>
               </div>
             </CardContent>
             <CardFooter className="justify-center">
               <Button variant="outline" onClick={handleChangeHostName}>
-                HostName Change
+                HostName 변경
               </Button>
             </CardFooter>
           </Card>
