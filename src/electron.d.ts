@@ -1,12 +1,12 @@
 interface Response {
   success: boolean;
   message: string;
-  data: object;
+  data: Record<string, any>;
 }
 
 interface Electron {
-  changeHostName: (param: object) => Promise<Response>;
-  changeIp: (param: object) => Promise<Response>;
+  changeHostName: (param: Record<string, any>) => Promise<Response>;
+  changeIp: (param: Record<string, any>) => Promise<Response>;
   getConfig: () => Promise<Response>;
   reboot: () => Promise<Reponse>;
 }

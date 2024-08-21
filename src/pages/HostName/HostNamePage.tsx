@@ -3,41 +3,29 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from '@/components/ui/label.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Button } from '@/components/ui/button.tsx';
-import { toast } from '@/components/ui/use-toast.ts';
-import { useConfirmStore } from '@/store/confirmStore.ts';
 import { useConfigStore } from '@/store/configStore.ts';
+import { useHandleAsyncTask } from '@/utils/handleAsyncTask.ts';
 
 export default function HostNamePage() {
+  const handleAsyncTask = useHandleAsyncTask();
   const { configData } = useConfigStore();
-  const { setConfirm } = useConfirmStore();
   const [changeHostName, setChangeHostname] = useState('local-');
-  const currentHostName = configData.data?.currentHostName || '로딩 중...';
+  const currentHostName = configData.currentHostName || '';
 
   const handleChange = (e: any) => {
     setChangeHostname(e.target.value);
   };
 
   const handleChangeHostName = async () => {
-    const regex = /^[a-zA-Z0-9-]*$/;
-    if (!regex.test(changeHostName)) {
-      toast({
-        variant: 'destructive',
-        title: '호스트 네임을 정상적으로 입력해주세요.',
-        description: '호스트네임은 영문, 숫자, "-" 만 가능합니다.',
-      });
-      return;
-    }
-
-    const response = await window.electron.changeHostName({ currentHostName, changeHostName });
-    if (!response.success) {
-      toast({ variant: 'destructive', title: response.message });
-    } else {
-      setConfirm({
-        title: response.message,
-        description: '컴퓨터를 지금 다시 시작 하시겠습니까??',
-        handleProceed: await window.electron.reboot,
-      });
-    }
+    await handleAsyncTask({
+      validationFunc: () => /^[a-zA-Z0-9-]*$/.test(changeHostName),
+      validationMessage: '호스트네임은 영문, 숫자, "-" 만 가능합니다.',
+      apiFunc: () => window.electron.changeHostName({ currentHostName, changeHostName }),
+      confirmOptions: {
+        description: '컴퓨터를 지금 다시 시작 하시겠습니까?',
+        handleProceed: async () => await window.electron.reboot(),
+      },
+    });
   };
 
   return (

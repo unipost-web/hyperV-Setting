@@ -13,9 +13,12 @@ import { Toaster } from '@/components/ui/toaster.tsx';
 import { useConfigStore } from '@/store/configStore.ts';
 import { useEffect, useState } from 'react';
 import UniAlert from '@/components/common/UniAlert.tsx';
+import LoadingModal from '@/components/common/LoadingModal.tsx';
+import { useLoadingStore } from '@/store/loadingStore.ts';
 
 function App() {
   const { setConfigData } = useConfigStore();
+  const { startLoading, stopLoading } = useLoadingStore();
   const [isElectronReady, setIsElectronReady] = useState(false);
 
   useEffect(() => {
@@ -31,10 +34,12 @@ function App() {
 
   useEffect(() => {
     const getConfigData = async () => {
+      startLoading();
       if (isElectronReady) {
-        const config = await window.electron.getConfig();
-        setConfigData(config);
+        const { data } = await window.electron.getConfig();
+        setConfigData(data);
       }
+      stopLoading();
     };
     getConfigData();
   }, [isElectronReady]);
@@ -45,6 +50,7 @@ function App() {
         <Toaster />
         <UniConfirm />
         <UniAlert />
+        <LoadingModal />
         <Routes>
           <Route path={'/'} element={<MainPage />}></Route>
           <Route path={'/hostName'} element={<HostNamePage />}></Route>
