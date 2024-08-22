@@ -10,11 +10,10 @@ import { useHandleAsyncTask } from '@/utils/handleAsyncTask.ts';
 
 export default function NetWorkPage() {
   const handleAsyncTask = useHandleAsyncTask();
-  const { configData, setConfigData } = useConfigStore();
+  const { configData } = useConfigStore();
   const [changeIp, setChangeIp] = useState('192.168.12.');
 
   const ipconfig = configData.ipconfig || [];
-  const publicIp = configData.publicIp || '';
   const currentNetworkConfig = ipconfig.find((configItem: any) => {
     const ipv4 = configItem.ipv4;
     const regex = /^192\.168\.(10|11|12)\./;
@@ -33,20 +32,15 @@ export default function NetWorkPage() {
       apiFunc: () => window.electron.changeIp({ interfaceName: currentNetworkConfig.interfaceName, changeIp }),
       alertOptions: {
         closeCallBack: async () => {
-          const { data } = await window.electron.getConfig();
-          setConfigData(data);
-          setChangeIp('192.168.12.');
+          window.location.reload();
         },
       },
     });
   };
 
-  console.log(currentNetworkConfig);
-
   return (
     <>
-      <h3 className="text-2xl font-extrabold">공인 IP : {publicIp}</h3>
-      <h3 className="text-2xl font-extrabold mb-10">VPN이 켜져 있다면 끄고 재시작 후 확인 해주세요!! </h3>
+      <h3 className="text-2xl font-extrabold mb-10">VPN이 켜져 있다면 끄고 F5(새로고침) 후 확인 해주세요!! </h3>
       <Tabs defaultValue="infomation" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="infomation">정보 조회</TabsTrigger>

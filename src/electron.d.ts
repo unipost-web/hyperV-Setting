@@ -7,6 +7,7 @@ interface Response {
 interface Electron {
   changeHostName: (param: Record<string, any>) => Promise<Response>;
   changeIp: (param: Record<string, any>) => Promise<Response>;
+  savePortProxy: (param: Record<string, any>) => Promise<Response>;
   getConfig: () => Promise<Response>;
   reboot: () => Promise<Reponse>;
 }

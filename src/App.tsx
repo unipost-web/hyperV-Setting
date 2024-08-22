@@ -36,8 +36,8 @@ function App() {
     const getConfigData = async () => {
       startLoading();
       if (isElectronReady) {
-        const { data } = await window.electron.getConfig();
-        setConfigData(data);
+        const response = await window.electron.getConfig();
+        if (response.success) setConfigData(response.data);
       }
       stopLoading();
     };

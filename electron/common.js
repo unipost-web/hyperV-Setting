@@ -25,7 +25,7 @@ export const execPromise = (command) => {
   return new Promise((resolve, reject) => {
     exec(command, { encoding: 'buffer' }, (err, stdout, stderr) => {
       if (err) {
-        reject({ error: err, stderr });
+        reject(err);
       } else {
         resolve(iconv.decode(stdout, 'cp949'));
       }

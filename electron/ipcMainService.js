@@ -66,9 +66,9 @@ export default function setupIpcHandlers() {
       const ipconfig = await execPromise('ipconfig /all');
       const adapters = parseIpConfigOutput(ipconfig);
 
-      const publicIp = await execPromise('curl ifconfig.me');
+      // const publicIp = await execPromise('curl ifconfig.me');
 
-      return createResponse(true, '', { currentHostName: cleanedHostName, ipconfig: adapters, publicIp });
+      return createResponse(true, '', { currentHostName: cleanedHostName, ipconfig: adapters });
     } catch (error) {
       return createResponse(false, `getConfig Error: ${error.message}`);
     }
@@ -78,6 +78,7 @@ export default function setupIpcHandlers() {
     try {
       const { currentHostName, changeHostName } = param;
       const hostNameChangeCommand = `wmic ComputerSystem Where Name="${currentHostName}" Call Rename Name="${changeHostName}"`;
+
       await execPromise(hostNameChangeCommand);
 
       return createResponse(true, '호스트네임 변경 완료');
@@ -90,10 +91,46 @@ export default function setupIpcHandlers() {
     try {
       const { interfaceName, changeIp } = param;
 
-      const ipChangeCommand = `netsh interface ip set address name="${interfaceName}" static ${changeIp} 255.255.255.0 ${getDefaultGateway(changeIp)}`;
-      await execPromise(ipChangeCommand);
+      const ipChangeCommand = `netsh interface ipv4 set address name="${interfaceName}" static ${changeIp} 255.255.255.0 ${getDefaultGateway(changeIp)}`;
+      const dnsChangeCommand = `netsh interface ipv4 set dns name="${interfaceName}" static 164.124.101.2`;
+      const dnsChangeCommand2 = `netsh interface ipv4 add dns name="${interfaceName}" static 8.8.8.8`;
 
-      return createResponse(true, 'Ip 주소 변경 완료');
+      await execPromise(ipChangeCommand);
+      await execPromise(dnsChangeCommand);
+      await execPromise(dnsChangeCommand2);
+
+      return createResponse(true, 'Ip 주소 및 DNS 변경 완료');
+    } catch (error) {
+      return createResponse(false, `changeIp Error: ${error.message}`);
+    }
+  });
+
+  ipcMain.handle('changeHostName', async (event, param) => {
+    try {
+      const { currentHostName, changeHostName } = param;
+      const hostNameChangeCommand = `wmic ComputerSystem Where Name="${currentHostName}" Call Rename Name="${changeHostName}"`;
+
+      await execPromise(hostNameChangeCommand);
+
+      return createResponse(true, '호스트네임 변경 완료');
+    } catch (error) {
+      return createResponse(false, `changeHostName Error: ${error.message}`);
+    }
+  });
+
+  ipcMain.handle('savePortProxy', async (event, param) => {
+    try {
+      for (let j = 0; j < param.length; j++) {
+        const item = param[j];
+        const { listenPort, connectPort, connectAddress } = item;
+
+        for (let i = 0; i < listenPort.length; i++) {
+          const portProxyCommand = `netsh interface portproxy add v4tov4 listenport=${listenPort[i]} connectport=${connectPort[i]} connectaddress=${connectAddress}`;
+          await execPromise(portProxyCommand);
+        }
+      }
+
+      return createResponse(true, 'PortProxy 추가 완료');
     } catch (error) {
       return createResponse(false, `changeIp Error: ${error.message}`);
     }
