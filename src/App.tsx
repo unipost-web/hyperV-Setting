@@ -37,7 +37,10 @@ function App() {
       startLoading();
       if (isElectronReady) {
         const response = await window.electron.getConfig();
-        if (response.success) setConfigData(response.data);
+        if (response.success) {
+          const params = { ...response.data };
+          setConfigData(params);
+        }
       }
       stopLoading();
     };

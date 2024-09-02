@@ -13,7 +13,7 @@ export default function NetWorkPage() {
   const { configData } = useConfigStore();
   const [changeIp, setChangeIp] = useState('192.168.12.');
 
-  const ipconfig = configData.ipconfig || [];
+  const ipconfig = configData.ipconfig;
   const currentNetworkConfig = ipconfig.find((configItem: any) => {
     const ipv4 = configItem.ipv4;
     const regex = /^192\.168\.(10|11|12)\./;
@@ -40,7 +40,7 @@ export default function NetWorkPage() {
 
   return (
     <>
-      <h3 className="text-2xl font-extrabold mb-10">VPN이 켜져 있다면 끄고 F5(새로고침) 후 확인 해주세요!! </h3>
+      <h3 className="text-2xl font-extrabold mb-5">VPN이 켜져 있다면 끄고 F5(새로고침) 후 확인 해주세요!! </h3>
       <Tabs defaultValue="infomation" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="infomation">정보 조회</TabsTrigger>

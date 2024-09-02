@@ -1,5 +1,4 @@
-// configStore.ts
-import create from 'zustand';
+import { create } from 'zustand';
 
 interface ConfigState {
   configData: Record<string, any>; // configData의 타입을 명확히 정의
@@ -7,7 +6,7 @@ interface ConfigState {
 }
 
 export const useConfigStore = create<ConfigState>((set) => ({
-  configData: {},
+  configData: { currentHostName: '', ipconfig: [], publicIp: '' },
   setConfigData: (params) =>
     set((state) => ({
       configData: { ...state.configData, ...params }, // 기존 상태를 유지하면서 새 데이터로 업데이트

@@ -44,6 +44,14 @@ const parseIpConfigOutput = (output) => {
   return adapters;
 };
 
+const convertPortsToArray = (proxyData) => {
+  return proxyData.map((proxyItem) => ({
+    ...proxyItem,
+    listenPort: proxyItem.listenPort.split(',').map(Number),
+    connectPort: proxyItem.connectPort.split(',').map(Number),
+  }));
+};
+
 // 기본 게이트웨이를 결정하기 위한 함수
 const getDefaultGateway = (ip) => {
   if (ip.startsWith('192.168.10.')) {
@@ -65,8 +73,6 @@ export default function setupIpcHandlers() {
 
       const ipconfig = await execPromise('ipconfig /all');
       const adapters = parseIpConfigOutput(ipconfig);
-
-      // const publicIp = await execPromise('curl ifconfig.me');
 
       return createResponse(true, '', { currentHostName: cleanedHostName, ipconfig: adapters });
     } catch (error) {
@@ -93,7 +99,7 @@ export default function setupIpcHandlers() {
 
       const ipChangeCommand = `netsh interface ipv4 set address name="${interfaceName}" static ${changeIp} 255.255.255.0 ${getDefaultGateway(changeIp)}`;
       const dnsChangeCommand = `netsh interface ipv4 set dns name="${interfaceName}" static 164.124.101.2`;
-      const dnsChangeCommand2 = `netsh interface ipv4 add dns name="${interfaceName}" static 8.8.8.8`;
+      const dnsChangeCommand2 = `netsh interface ipv4 add dns name="${interfaceName}" 8.8.8.8 index=2`;
 
       await execPromise(ipChangeCommand);
       await execPromise(dnsChangeCommand);
@@ -105,34 +111,53 @@ export default function setupIpcHandlers() {
     }
   });
 
-  ipcMain.handle('changeHostName', async (event, param) => {
+  ipcMain.handle('getPortProxy', async () => {
     try {
-      const { currentHostName, changeHostName } = param;
-      const hostNameChangeCommand = `wmic ComputerSystem Where Name="${currentHostName}" Call Rename Name="${changeHostName}"`;
+      await execPromise('start cmd /k "netsh interface portproxy show all');
 
-      await execPromise(hostNameChangeCommand);
-
-      return createResponse(true, '호스트네임 변경 완료');
+      return createResponse(true, '', {});
     } catch (error) {
-      return createResponse(false, `changeHostName Error: ${error.message}`);
+      return createResponse(false, `PortProxy Error: ${error.message}`);
+    }
+  });
+
+  ipcMain.handle('initPortProxy', async () => {
+    try {
+      await execPromise('netsh interface portproxy reset');
+
+      return createResponse(true, '초기화 완료', {});
+    } catch (error) {
+      return createResponse(false, `PortProxy Error: ${error.message}`);
+    }
+  });
+
+  ipcMain.handle('deletePortProxy', async (event, listenPort) => {
+    try {
+      await execPromise(`netsh interface portproxy delete v4tov4 listenport=${listenPort}`);
+
+      return createResponse(true, '삭제 완료', {});
+    } catch (error) {
+      return createResponse(false, `PortProxy Error: ${error.message}`);
     }
   });
 
   ipcMain.handle('savePortProxy', async (event, param) => {
     try {
-      for (let j = 0; j < param.length; j++) {
-        const item = param[j];
-        const { listenPort, connectPort, connectAddress } = item;
+      const filterParam = convertPortsToArray(param);
+      for (let j = 0; j < filterParam.length; j++) {
+        const item = filterParam[j];
+        const { listenAddress, listenPort, connectPort, connectAddress } = item;
 
         for (let i = 0; i < listenPort.length; i++) {
-          const portProxyCommand = `netsh interface portproxy add v4tov4 listenport=${listenPort[i]} connectport=${connectPort[i]} connectaddress=${connectAddress}`;
+          const portProxyCommand = `netsh interface portproxy add v4tov4 listenaddress=${listenAddress} listenport=${listenPort[i]} connectport=${connectPort[i]} connectaddress=${connectAddress}`;
+          console.log(portProxyCommand);
           await execPromise(portProxyCommand);
         }
       }
 
       return createResponse(true, 'PortProxy 추가 완료');
     } catch (error) {
-      return createResponse(false, `changeIp Error: ${error.message}`);
+      return createResponse(false, `PortProxy Error: ${error.message}`);
     }
   });
 
