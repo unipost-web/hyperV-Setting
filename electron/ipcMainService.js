@@ -29,7 +29,7 @@ const parseIpConfigOutput = (output) => {
       // 어댑터 정보 추가
       if (trimmedLine.startsWith('물리적 주소')) {
         currentAdapter.mac = trimmedLine.split(':')[1].trim();
-      } else if (trimmedLine.startsWith('IPv4 주소')) {
+      } else if (trimmedLine.startsWith('IPv4 주소') || trimmedLine.startsWith('자동 구성 IPv4 주소')) {
         currentAdapter.ipv4 = trimmedLine.split(':')[1].split('(')[0].trim();
       } else if (trimmedLine.startsWith('서브넷 마스크')) {
         currentAdapter.subnetMask = trimmedLine.split(':')[1].trim();

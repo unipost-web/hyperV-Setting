@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'SUITE';
+  src: url('/src/assets/font/SUITE.woff2');
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -65,6 +70,6 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'SUITE', sans-serif; /* 폰트 적용 */
+    font-family: var(--font-family);
   }
 }

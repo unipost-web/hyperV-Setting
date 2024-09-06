@@ -39,6 +39,7 @@ function App() {
         const response = await window.electron.getConfig();
         if (response.success) {
           const params = { ...response.data };
+          document.documentElement.style.setProperty('--font-family', 'SUITE');
           setConfigData(params);
         }
       }
