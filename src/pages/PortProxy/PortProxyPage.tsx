@@ -6,6 +6,7 @@ import { Fragment, useState } from 'react';
 import { useHandleAsyncTask } from '@/utils/handleAsyncTask.ts';
 import { useConfirmStore } from '@/store/confirmStore.ts';
 import { Textarea } from '@/components/ui/textarea.tsx';
+import HeaderTitle from '@/components/common/HeaderTitle.tsx';
 
 interface ProxyData {
   id: string;
@@ -145,6 +146,10 @@ export default function PortProxyPage() {
 
   return (
     <>
+      <HeaderTitle
+        title={'PortProxy 설정'}
+        description={'PortProxy 추가, 조회, 삭제를 상황에 맞게 진행하세요.'}
+      ></HeaderTitle>
       <Tabs
         defaultValue="default"
         className="w-full"

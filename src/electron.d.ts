@@ -12,6 +12,7 @@ interface Electron {
   initPortProxy: () => Promise<Response>;
   deletePortProxy: (listenPort: number) => Promise<Response>;
   getConfig: () => Promise<Response>;
+  updateSapGui: (param: Record<string, any>) => Promise<Response>;
   reboot: () => Promise<Reponse>;
 }
 

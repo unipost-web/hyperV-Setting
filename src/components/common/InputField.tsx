@@ -7,13 +7,14 @@ interface InputFieldProps {
   value: string;
   onChange: (e: any) => void;
   type?: string;
+  placeholder?: string;
 }
 
-const InputField = ({ label, id, value, onChange, type = 'text' }: InputFieldProps) => {
+const InputField = ({ label, id, value, onChange, placeholder, type = 'text' }: InputFieldProps) => {
   return (
     <div className="grid gap-3 mt-4">
       <Label>{label}</Label>
-      <Input id={id} type={type} className="w-full" value={value} onChange={onChange} />
+      <Input id={id} type={type} className="w-full" value={value} onChange={onChange} placeholder={placeholder} />
     </div>
   );
 };

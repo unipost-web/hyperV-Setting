@@ -4,12 +4,8 @@ import ModeToggle from '@/components/common/ModeToggle.tsx';
 
 const sidebarNavItems = [
   {
-    title: 'Main',
-    href: '/',
-  },
-  {
     title: 'HostName',
-    href: '/hostName',
+    href: '/',
   },
   {
     title: 'NetWork',
@@ -20,8 +16,8 @@ const sidebarNavItems = [
     href: '/portProxy',
   },
   {
-    title: 'Util',
-    href: '/util',
+    title: 'SAP',
+    href: '/sap',
   },
 ];
 
@@ -43,10 +39,10 @@ const RootLayout = ({ children }: SettingsLayoutProps) => {
       </div>
       <Separator className="my-6" />
       <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-        <aside className="-mx-4 lg:w-1/5">
+        <aside className="-mx-4 lg:w-1/6">
           <SidebarNav items={sidebarNavItems} />
         </aside>
-        <div className="flex-1 lg:max-w-2xl">{children}</div>
+        <div className="flex-1 w-full">{children}</div>
       </div>
     </div>
   );

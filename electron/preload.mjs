@@ -24,5 +24,8 @@ contextBridge.exposeInMainWorld('electron', {
   },
   deletePortProxy : async (listenPort) => {
     return await ipcRenderer.invoke('deletePortProxy', listenPort);
-  }
+  },
+  updateSapGui : async ({workSpace, param}) => {
+    return await ipcRenderer.invoke('updateSapGui', workSpace, param);
+  },
 });

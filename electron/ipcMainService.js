@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron';
-import { execPromise } from './common.js';
+import { execPromise, paths } from './common.js';
 
 // 공통 응답 생성 함수
 const createResponse = (success, message = '', data = {}) => ({
@@ -150,7 +150,6 @@ export default function setupIpcHandlers() {
 
         for (let i = 0; i < listenPort.length; i++) {
           const portProxyCommand = `netsh interface portproxy add v4tov4 listenaddress=${listenAddress} listenport=${listenPort[i]} connectport=${connectPort[i]} connectaddress=${connectAddress}`;
-          console.log(portProxyCommand);
           await execPromise(portProxyCommand);
         }
       }
@@ -158,6 +157,31 @@ export default function setupIpcHandlers() {
       return createResponse(true, 'PortProxy 추가 완료');
     } catch (error) {
       return createResponse(false, `PortProxy Error: ${error.message}`);
+    }
+  });
+
+  ipcMain.handle('updateSapGui', async (event, workSpace, param) => {
+    try {
+      const updatedData = param.map((item) => {
+        let instanceNum = item.instanceNumber;
+        // instanceNumber가 10 미만이면 앞에 '0'을 붙여 2자리로 만듦
+        if (parseInt(instanceNum) < 10) instanceNum = instanceNum.padStart(2, '0');
+        // '32'를 앞에 붙임
+        item.instanceNumber = `32${instanceNum}`;
+        return item;
+      });
+
+      const { updateSapPowerShellPath } = paths;
+
+      for (let i = 0; i < updatedData.length; i++) {
+        const { description, instanceNumber, systemId, applicationServer } = updatedData[i];
+        const sapGuiUpdateCommand = `powershell.exe -ExecutionPolicy Bypass -File "${updateSapPowerShellPath}" -serviceName "${description}" -systemId "${systemId}" -server "${applicationServer}:${instanceNumber}" -workSpace "${workSpace}"`;
+        await execPromise(sapGuiUpdateCommand);
+      }
+
+      return createResponse(true, 'SAP GUI UPDATE 완료');
+    } catch (error) {
+      return createResponse(false, `SAP GUI UPDATE Error: ${error.message}`);
     }
   });
 

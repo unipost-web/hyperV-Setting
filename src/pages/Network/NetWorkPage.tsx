@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.t
 import { Label } from '@/components/ui/label.tsx';
 import { useState } from 'react';
 import { useHandleAsyncTask } from '@/utils/handleAsyncTask.ts';
+import HeaderTitle from '@/components/common/HeaderTitle.tsx';
 
 export default function NetWorkPage() {
   const handleAsyncTask = useHandleAsyncTask();
@@ -40,7 +41,10 @@ export default function NetWorkPage() {
 
   return (
     <>
-      <h3 className="text-2xl font-extrabold mb-5">VPN이 켜져 있다면 끄고 F5(새로고침) 후 확인 해주세요!! </h3>
+      <HeaderTitle
+        title={'IP 정보 조회 및 변경'}
+        description={'VPN이 켜져 있다면 끄고 F5(새로고침) 후 확인 해주세요.'}
+      ></HeaderTitle>
       <Tabs defaultValue="infomation" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="infomation">정보 조회</TabsTrigger>

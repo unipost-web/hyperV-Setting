@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.tsx';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card.tsx';
 import { Label } from '@/components/ui/label.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { useConfigStore } from '@/store/configStore.ts';
 import { useHandleAsyncTask } from '@/utils/handleAsyncTask.ts';
+import HeaderTitle from '@/components/common/HeaderTitle.tsx';
 
 export default function HostNamePage() {
   const handleAsyncTask = useHandleAsyncTask();
@@ -30,13 +31,14 @@ export default function HostNamePage() {
 
   return (
     <>
+      <HeaderTitle
+        title={'PC 이름 바꾸기'}
+        description={'문자, 하이픈 및 숫자를 조합해서 사용할 수 있습니다.'}
+      ></HeaderTitle>
       <div className="grid gap-4">
         <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
           <Card x-chunk="dashboard-07-chunk-0">
-            <CardHeader>
-              <CardTitle>PC 이름 바꾸기</CardTitle>
-              <CardDescription>문자, 하이픈 및 숫자를 조합해서 사용할 수 있습니다.</CardDescription>
-            </CardHeader>
+            <CardHeader></CardHeader>
             <CardContent>
               <div className="grid gap-6">
                 <div className="grid gap-3">

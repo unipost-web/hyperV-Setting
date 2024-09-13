@@ -7,7 +7,7 @@ let mainWindow, tray;
 const { preloadPath, runPath, iconPath } = paths;
 
 const browserOption = {
-  width: 800,
+  width: 1280,
   height: 960,
   icon: iconPath,
   webPreferences: {

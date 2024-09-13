@@ -19,6 +19,7 @@ export const paths = {
     : `file://${path.join(__dirname, 'resources', 'app', 'build', 'index.html')}`,
   preloadPath: path.join(currentPaths, 'preload.mjs'),
   iconPath: path.join(currentPaths, 'favicon.ico'),
+  updateSapPowerShellPath: path.join(currentPaths, 'UpdateSAP.ps1'),
 };
 
 export const execPromise = (command) => {

@@ -1,11 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
 
 import RootLayout from '@/pages/RootLayout.tsx';
-import MainPage from '@/pages/Main/MainPage.tsx';
 import HostNamePage from '@/pages/HostName/HostNamePage.tsx';
 import NetWorkPage from '@/pages/Network/NetWorkPage.tsx';
 import PortProxyPage from '@/pages/PortProxy/PortProxyPage.tsx';
-import UtilPage from '@/pages/Util/UtilPage.tsx';
 import UniConfirm from '@/components/common/UniConfirm.tsx';
 
 import { ThemeProvider } from '@/components/theme-provider.tsx';
@@ -15,6 +13,7 @@ import { useEffect, useState } from 'react';
 import UniAlert from '@/components/common/UniAlert.tsx';
 import LoadingModal from '@/components/common/LoadingModal.tsx';
 import { useLoadingStore } from '@/store/loadingStore.ts';
+import SapPage from '@/pages/SAP/SapPage.tsx';
 
 function App() {
   const { setConfigData } = useConfigStore();
@@ -56,11 +55,10 @@ function App() {
         <UniAlert />
         <LoadingModal />
         <Routes>
-          <Route path={'/'} element={<MainPage />}></Route>
-          <Route path={'/hostName'} element={<HostNamePage />}></Route>
+          <Route path={'/'} element={<HostNamePage />}></Route>
           <Route path={'/netWork'} element={<NetWorkPage />}></Route>
           <Route path={'/portProxy'} element={<PortProxyPage />}></Route>
-          <Route path={'/util'} element={<UtilPage />}></Route>
+          <Route path={'/sap'} element={<SapPage />}></Route>
         </Routes>
       </RootLayout>
     </ThemeProvider>
