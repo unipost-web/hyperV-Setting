@@ -31,9 +31,7 @@ const RootLayout = ({ children }: SettingsLayoutProps) => {
       <div className="flex justify-between items-center">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">HyperV-Setting</h2>
-          <p className="text-muted-foreground">
-            Easily manage and configure your virtual environment's essential settings.
-          </p>
+          <p className="text-muted-foreground">Hyper-V PC를 편하게 세팅해 보아요~</p>
         </div>
         <ModeToggle />
       </div>
