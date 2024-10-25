@@ -29,3 +29,9 @@ contextBridge.exposeInMainWorld('electron', {
     return await ipcRenderer.invoke('updateSapGui', workSpace, param);
   },
 });
+
+contextBridge.exposeInMainWorld('ipcRenderer', {
+  on: (channel, callback) => ipcRenderer.on(channel, callback),
+  send: (channel, ...args) => ipcRenderer.send(channel, ...args),
+  removeListener: (channel, callback) => ipcRenderer.removeListener(channel, callback),
+});

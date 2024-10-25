@@ -16,6 +16,13 @@ interface Electron {
   reboot: () => Promise<Reponse>;
 }
 
+interface IpcRenderer {
+  on: (channel: string, callback: (event: Electron.IpcRendererEvent, ...args: any[]) => void) => void;
+  send: (channel: string, ...args: any[]) => void;
+  removeAllListeners: (channel: string) => void;
+}
+
 interface Window {
   electron: Electron;
+  ipcRenderer: IpcRenderer;
 }

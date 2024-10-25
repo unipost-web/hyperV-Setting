@@ -18,12 +18,23 @@ import SapPage from '@/pages/SAP/SapPage.tsx';
 function App() {
   const { setConfigData } = useConfigStore();
   const { startLoading, stopLoading } = useLoadingStore();
-  const [isElectronReady, setIsElectronReady] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
 
   useEffect(() => {
-    const checkElectron = () => {
-      if (window.electron) {
-        setIsElectronReady(true);
+    const checkElectron = async () => {
+      console.log(window.ipcRenderer);
+      if (window.electron && window.ipcRenderer) {
+        startLoading();
+
+        const { data } = await window.electron.getConfig();
+        setConfigData(data);
+        document.documentElement.style.setProperty('--font-family', 'SUITE');
+
+        window.ipcRenderer.on('update-available', (_event, response) => {
+          console.log(response);
+          setIsUpdate(response.isUpdate);
+        });
+        stopLoading();
       } else {
         setTimeout(checkElectron, 100); // 100ms 후에 다시 확인
       }
@@ -31,25 +42,9 @@ function App() {
     checkElectron();
   }, []);
 
-  useEffect(() => {
-    const getConfigData = async () => {
-      startLoading();
-      if (isElectronReady) {
-        const response = await window.electron.getConfig();
-        if (response.success) {
-          const params = { ...response.data };
-          document.documentElement.style.setProperty('--font-family', 'SUITE');
-          setConfigData(params);
-        }
-      }
-      stopLoading();
-    };
-    getConfigData();
-  }, [isElectronReady]);
-
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <RootLayout>
+      <RootLayout isUpdate={isUpdate}>
         <Toaster />
         <UniConfirm />
         <UniAlert />

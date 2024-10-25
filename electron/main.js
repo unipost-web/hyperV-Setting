@@ -1,7 +1,12 @@
 import { app, BrowserWindow, Tray, Menu } from 'electron';
 import electronLocalShortcut from 'electron-localshortcut';
+import isDev from 'electron-is-dev';
 import { paths } from './common.js';
-import setupIpcHandlers from './ipcMainService.js';
+import { setupIpcHandlers, setupAutoUpdateHandlers } from './ipcMainService.js';
+
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const { autoUpdater } = require('electron-updater');
 
 let mainWindow, tray;
 const { preloadPath, runPath, iconPath } = paths;
@@ -88,4 +93,8 @@ app.on('ready', () => {
   createWindow();
   createTray();
   setupIpcHandlers();
+  if (!isDev) {
+    setupAutoUpdateHandlers(mainWindow, app);
+    autoUpdater.checkForUpdatesAndNotify();
+  }
 });
