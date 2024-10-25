@@ -22,7 +22,6 @@ function App() {
 
   useEffect(() => {
     const checkElectron = async () => {
-      console.log(window.ipcRenderer);
       if (window.electron && window.ipcRenderer) {
         startLoading();
 
